@@ -1,0 +1,33 @@
+.left {
+    width: 18%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    position: fixed;
+    left: 0;
+    top: 9.4%;
+    bottom: 0;
+    padding: 2rem 1rem;
+}
+
+.left .menus {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.left .menus .profile-pic {
+    border-radius: 50%;
+}
+
+.left .menus:hover {
+    background-color: rgb(223, 223, 223);
+    border-radius: 8px;
+}
+
+.active {
+    background-color: rgb(223, 223, 223);
+    border-radius: 8px;
+}

@@ -1,0 +1,106 @@
+.sign-in {
+    width: 100%;
+    min-height: 100vh;
+    background-image: url("../../assets/bg-images/bg-sign-in-basic.jpeg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.sign-in > h1 {
+    position: fixed;
+    top: 1.5rem;
+    left: auto;
+    font-size: 2.5rem;
+    font-weight: bolder;
+    color: white;
+}
+
+.sign-in-container {
+    width: 100%;
+    max-width: 500px;
+    background-color: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.sign-in-container > h1 {
+    width: 100%;
+    text-align: center;
+    background: linear-gradient(195deg, rgb(73, 163, 241), rgb(26, 115, 232));
+    color: white;
+    padding: 1rem;
+    border-radius: 10px;
+}
+
+.sign-in-container > form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.sign-in-container > form label {
+    font-size: 20px;
+    margin-bottom: 5px;
+}
+
+.sign-in-container > form input {
+    width: 100%;
+    font-size: 18px;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid gray;
+    outline: none;
+    margin-bottom: 2rem;
+}
+
+.sign-in-container > form button {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+    background: linear-gradient(195deg, rgb(73, 163, 241), rgb(26, 115, 232));
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+form button:hover {
+    opacity: 0.8;
+}
+
+.sign-in-msg {
+    cursor: pointer;
+}
+
+.sign-in-msg:hover {
+    opacity: 0.7;
+    text-decoration: underline;
+}
+
+.sign-in .footer {
+    position: fixed;
+    bottom: 0;
+    left: auto;
+    color: white;
+    font-size: 20px;
+}
+
+.sign-in-error {
+    position: absolute;
+    bottom: -30px;
+    color: red;
+}

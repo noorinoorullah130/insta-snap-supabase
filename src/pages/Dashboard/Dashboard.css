@@ -1,0 +1,46 @@
+.dashboard {
+    width: 82%;
+    min-height: 100vh;
+    margin-left: 18%;
+    padding: 2rem 3rem;
+    border-left: 3px solid gray;
+}
+
+.dashboard .main-content {
+    width: 100%;
+    margin: 5% auto 0;
+    padding: 2rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 3rem;
+}
+
+/* left side */
+
+.main-content .all-posts {
+    width: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* right side */
+
+.suggestions-container {
+    width: 23%;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 1rem;
+    position: fixed;
+    right: 1rem;
+    overflow: hidden;
+    padding: 1rem;
+    max-height: 80vh;
+}
+
+.suggestions-container:hover {
+    overflow-y: auto;
+}

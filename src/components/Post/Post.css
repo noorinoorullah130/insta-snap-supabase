@@ -1,0 +1,90 @@
+.all-posts .post {
+    width: 100%;
+    padding: 2rem;
+    background-color: white;
+    border-radius: 1rem;
+}
+
+.post .post-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+}
+
+.post-header .post-header-left {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.post-header img {
+    width: 75px;
+    border-radius: 50%;
+}
+
+.post .post-body {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.post-content {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid rgb(201, 201, 201);
+    padding-bottom: 1rem;
+}
+
+.post-content img {
+    width: 100%;
+}
+
+.post-body .post-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 5px;
+}
+
+.post-actions button {
+    width: 100%;
+    padding: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    background-color: #1877f2;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.post-actions button span {
+    position: absolute;
+    top: -1.8rem;
+    left: 2%;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.post-actions button span img {
+    width: 25px;
+}
+
+.post-actions button:nth-child(2) {
+    background-color: #ffc107;
+}
+
+.post-actions button:nth-child(3) {
+    background-color: #9c27b0;
+}
+
+.post-actions button:hover {
+    opacity: 0.8;
+}

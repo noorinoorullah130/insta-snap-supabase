@@ -1,0 +1,46 @@
+.main-content .suggestions {
+    padding: 1rem;
+}
+
+.suggestions h1 {
+    margin-bottom: 2rem;
+}
+
+.suggest {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    border-bottom: 1px solid gray;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+}
+
+.suggest img {
+    width: 100px;
+    border-radius: 50%;
+}
+
+.suggest .suggest-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.suggest-details button {
+    width: 100%;
+    padding: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    background-color: #1877f2;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.suggest-details button:hover {
+    opacity: 0.8;
+}
