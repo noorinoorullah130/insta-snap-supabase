@@ -3,6 +3,8 @@ import "./SignIn.css";
 import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
+    const navigate = useNavigate();
+
     return (
         <div className="sign-in">
             <h1>Welcome to InstaSnap</h1>
