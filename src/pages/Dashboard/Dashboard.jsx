@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import "./Dashboard.css";
@@ -7,8 +7,14 @@ import Left from "../../components/Left/Left";
 import Post from "../../components/Post/Post";
 import Suggestions from "../../components/Suggestions/Suggestions";
 import Loader from "../../Common/Loader";
+import AppContext from "../../Context";
 
 const Dashboard = () => {
+    const { loggedInUserPosts } = useContext(AppContext);
+
+    if (!loggedInUserPosts) {
+        return <Loader />;
+    }
 
     return (
         <div className="dashboard">
@@ -16,14 +22,14 @@ const Dashboard = () => {
             <Left />
             <div className="main-content">
                 <div className="all-posts">
-                    {/* {allPosts.length > 0 ? (
-                        <Post allPosts={allPosts} />
+                    {loggedInUserPosts.length > 0 ? (
+                        <Post loggedInUserPosts={loggedInUserPosts} />
                     ) : (
                         <p>
                             No posts available. Please add new posts or add new
                             friend.
                         </p>
-                    )} */}
+                    )}
                 </div>
 
                 <div className="suggestions-container">

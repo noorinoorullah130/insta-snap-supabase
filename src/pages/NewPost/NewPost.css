@@ -22,12 +22,19 @@
     border-radius: 1rem;
 }
 
-.post-form label {
+.post-form .input-group {
+    display: flex;
+    flex-direction: column;
+    /* gap: 1rem; */
+    position: relative;
+}
+
+.post-form .input-group label {
     font-size: 25px;
     font-weight: bold;
 }
 
-.post-form input {
+.post-form .input-group input {
     padding: 12px 8px;
     border: 1px solid gray;
     border-radius: 4px;
@@ -35,7 +42,7 @@
     margin-bottom: 2rem;
 }
 
-.post-form textarea {
+.post-form .input-group textarea {
     padding: 12px 8px;
     border: 1px solid gray;
     border-radius: 4px;

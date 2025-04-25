@@ -6,7 +6,7 @@ import Left from "../../components/Left/Left";
 import Post from "../../components/Post/Post";
 import AppContext from "../../Context";
 
-const Profile = () => {
+const Profile = ({ loggedInUserPosts }) => {
     const { loggedInUser } = useContext(AppContext);
 
     return (
@@ -29,7 +29,7 @@ const Profile = () => {
                         </div>
                     </div>
                     <div className="all-posts">
-                        <Post />
+                        <Post loggedInUserPosts={loggedInUserPosts} />
                     </div>
                 </div>
             </div>

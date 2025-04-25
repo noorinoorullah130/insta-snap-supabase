@@ -1,27 +1,34 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./Post.css";
 import LikeIcon from "../../assets/thumbs-up-solid.svg";
 import CommentIcon from "../../assets/comment-solid.svg";
 import ShareIcon from "../../assets/share-solid.svg";
 import Loader from "../../Common/Loader";
 import Comment from "./../Comment/Comment";
+import AppContext from "../../Context";
 
-const Post = () => {
-    let sortedPosts = [];
+const Post = ({ loggedInUserPosts }) => {
+    const { loggedInUser } = useContext(AppContext);
 
-    return sortedPosts.map((post) => (
+    console.log(loggedInUserPosts);
+
+    if (!loggedInUser || !loggedInUserPosts) {
+        return <Loader />;
+    }
+
+    return loggedInUserPosts.map((post) => (
         <div className="post" key={post.id}>
             <div className="post-header">
                 <div className="post-header-left">
                     <img
-                        src={post.authorProfilePic}
+                        src={loggedInUser.image}
                         alt="post profile picture"
                         className="post-profile-img"
                     />
                     <div className="post-details">
-                        <h2 className="post-author">{post.authorName}</h2>
+                        <h2 className="post-author">{loggedInUser.name}</h2>
                         <p className="post-time">
-                            {new Date(post.timestamp).toLocaleString()}
+                            {new Date(post.created_at).toLocaleString()}
                         </p>
                     </div>
                 </div>
@@ -46,7 +53,6 @@ const Post = () => {
 
                 <div className="post-actions">
                     <button
-                        onClick={() => handleLike(post.id)}
                         className={`like-button ${post.isLiked ? "liked" : ""}`}
                     >
                         Like{" "}
@@ -59,10 +65,7 @@ const Post = () => {
                             />
                         </span>
                     </button>
-                    <button
-                        onClick={() => handleCommentToggle(post.id)}
-                        className="comment-button"
-                    >
+                    <button className="comment-button">
                         Comment{" "}
                         <span className="action-count">
                             ({post.comments?.length || 0}){" "}

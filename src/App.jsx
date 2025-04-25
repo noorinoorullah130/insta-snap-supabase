@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-import { data, Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import SignIn from "./pages/SignIn/SignIn";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import SignUp from "./pages/SignUp.jsx/SignUp";
@@ -14,6 +14,7 @@ import AppContext from "./Context";
 const App = () => {
     const [loggedInUser, setLoggedInUser] = useState();
     const [allUsers, setAllUsers] = useState([]);
+    const [loggedInUserPosts, setLoggedInUserPosts] = useState([]);
 
     const navigate = useNavigate();
 
@@ -24,8 +25,6 @@ const App = () => {
             console.log(loggedUserError);
         } else {
             console.log(loggedUser);
-            console.log(loggedUser.session.user);
-            console.log(loggedUser.session.user.email);
         }
 
         const { data: user, error: userError } = await supabase
@@ -51,19 +50,47 @@ const App = () => {
         }
     };
 
+    const fetchLoggedInUserPosts = async () => {
+        if (!loggedInUser?.id) return;
+
+        const { data, error } = await supabase
+            .from("posts")
+            .select("*")
+            .eq("user_id", loggedInUser.id)
+            .order("created_at", { ascending: false });
+
+        if (error) {
+            console.log(error);
+        } else {
+            console.log(data);
+            setLoggedInUserPosts(data);
+        }
+    };
+
     useEffect(() => {
         fetchLoggedInUser();
         fetchAllUsers();
     }, [navigate]);
 
+    useEffect(() => {
+        fetchLoggedInUserPosts();
+    }, [loggedInUser]);
+
     return (
         <div>
-            <AppContext.Provider value={{ loggedInUser, allUsers }}>
+            <AppContext.Provider
+                value={{ loggedInUser, allUsers, loggedInUserPosts }}
+            >
                 <Routes>
                     <Route path="/" element={<SignIn />} />
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/signup" element={<SignUp />} />
-                    <Route path="/profile" element={<Profile />} />
+                    <Route
+                        path="/profile"
+                        element={
+                            <Profile loggedInUserPosts={loggedInUserPosts} />
+                        }
+                    />
                     <Route path="/newpost" element={<NewPost />} />
                     <Route path="/friends" element={<Friends />} />
                 </Routes>

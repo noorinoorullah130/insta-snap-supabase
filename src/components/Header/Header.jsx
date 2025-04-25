@@ -5,7 +5,6 @@ import AppContext from "../../Context";
 
 const Header = () => {
     const { loggedInUser } = useContext(AppContext);
-    console.log(loggedInUser);
 
     return (
         <header className="header">

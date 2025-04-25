@@ -5,12 +5,19 @@ import HomeIcon from "../../assets/house-solid.svg";
 import FriendsIcon from "../../assets/user-group-solid.svg";
 import LogoutIcon from "../../assets/right-from-bracket-solid.svg";
 import NewPostIcon from "../../assets/new-post.png";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Loader from "../../Common/Loader";
 import AppContext from "../../Context";
+import { supabase } from "./../../supabase";
 
 const Left = () => {
     const { loggedInUser } = useContext(AppContext);
+    const navigate = useNavigate();
+
+    const handleLogout = async () => {
+        await supabase.auth.signOut();
+        navigate("/");
+    };
 
     return (
         <div className="left">
@@ -34,7 +41,7 @@ const Left = () => {
                 <h3>Friends</h3>
             </NavLink>
 
-            <NavLink to="/" className="menus">
+            <NavLink to="/" onClick={handleLogout} className="menus">
                 <img src={LogoutIcon} />
                 <h3>Logout</h3>
             </NavLink>
