@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-
 import { Route, Routes, useNavigate } from "react-router-dom";
 import SignIn from "./pages/SignIn/SignIn";
 import Dashboard from "./pages/Dashboard/Dashboard";
@@ -15,16 +14,19 @@ const App = () => {
     const [loggedInUser, setLoggedInUser] = useState();
     const [allUsers, setAllUsers] = useState([]);
     const [loggedInUserPosts, setLoggedInUserPosts] = useState([]);
+    const [allPosts, setAllPosts] = useState([]);
+    const [following, setFollowing] = useState([]);
 
     const navigate = useNavigate();
 
     const fetchLoggedInUser = async () => {
         const { data: loggedUser, error: loggedUserError } =
             await supabase.auth.getSession();
-        if (loggedUserError) {
-            console.log(loggedUserError);
-        } else {
-            console.log(loggedUser);
+
+        if (loggedUserError || !loggedUser.session) {
+            console.log("No session or error:", loggedUserError);
+            navigate("/");
+            return;
         }
 
         const { data: user, error: userError } = await supabase
@@ -42,7 +44,12 @@ const App = () => {
     };
 
     const fetchAllUsers = async () => {
-        const { data, error } = await supabase.from("users").select("*");
+        if (!loggedInUser?.id) return;
+
+        const { data, error } = await supabase
+            .from("users")
+            .select("*")
+            .neq("id", loggedInUser.id);
         if (error) console.log(error);
         else {
             setAllUsers(data);
@@ -62,35 +69,81 @@ const App = () => {
         if (error) {
             console.log(error);
         } else {
-            console.log(data);
             setLoggedInUserPosts(data);
+            console.log(data);
+        }
+    };
+
+    const fetchAllFriends = async () => {
+        const { data, error } = await supabase
+            .from("follows")
+            .select("following_id, users!following_id(*)")
+            .eq("follower_id", loggedInUser.id);
+
+        if (error) {
+            console.log(error);
+        } else {
+            setFollowing(data);
+            console.log(data);
+        }
+    };
+
+    const fetchUserAndFollowingPost = async () => {
+        const { data: followingData, error: followError } = await supabase
+            .from("follows")
+            .select("following_id")
+            .eq("follower_id", loggedInUser.id);
+
+        if (followError) {
+            console.error("Follow error:", followError);
+            return;
+        }
+
+        const followingIds = followingData.map((f) => f.following_id);
+
+        const allUserIds = [...followingIds, loggedInUser.id];
+
+        const { data: postsData, error: postsError } = await supabase
+            .from("posts")
+            .select("*, users(name, image)")
+            .in("user_id", allUserIds)
+            .order("created_at", { ascending: false });
+
+        if (postsError) {
+            console.error("Posts error:", postsError);
+        } else {
+            console.log("Feed posts:", postsData);
+            setAllPosts(postsData);
         }
     };
 
     useEffect(() => {
         fetchLoggedInUser();
-        fetchAllUsers();
     }, [navigate]);
 
     useEffect(() => {
+        fetchAllUsers();
         fetchLoggedInUserPosts();
+        fetchAllFriends();
+        fetchUserAndFollowingPost();
     }, [loggedInUser]);
 
     return (
         <div>
             <AppContext.Provider
-                value={{ loggedInUser, allUsers, loggedInUserPosts }}
+                value={{
+                    loggedInUser,
+                    allUsers,
+                    loggedInUserPosts,
+                    following,
+                    allPosts,
+                }}
             >
                 <Routes>
                     <Route path="/" element={<SignIn />} />
                     <Route path="/dashboard" element={<Dashboard />} />
                     <Route path="/signup" element={<SignUp />} />
-                    <Route
-                        path="/profile"
-                        element={
-                            <Profile loggedInUserPosts={loggedInUserPosts} />
-                        }
-                    />
+                    <Route path="/profile" element={<Profile />} />
                     <Route path="/newpost" element={<NewPost />} />
                     <Route path="/friends" element={<Friends />} />
                 </Routes>

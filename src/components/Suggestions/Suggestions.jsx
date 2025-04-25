@@ -3,9 +3,26 @@ import React, { useContext, useState } from "react";
 import "./Suggestions.css";
 import Loader from "../../Common/Loader";
 import AppContext from "../../Context";
+import { supabase } from "../../supabase";
+import { toast } from "react-toastify";
 
 const Suggestions = () => {
-    const { allUsers } = useContext(AppContext);
+    const { loggedInUser, allUsers } = useContext(AppContext);
+
+    const handleAddFriend = async (id) => {
+        const { data, error } = await supabase
+            .from("follows")
+            .insert([{ follower_id: loggedInUser.id, following_id: id }]);
+
+        if (error) {
+            console.log(error);
+        } else {
+            console.log(data);
+            toast.success("Successfully following user!");
+        }
+
+        console.log(id);
+    };
 
     return (
         <div className="suggestions">
@@ -19,7 +36,7 @@ const Suggestions = () => {
                                 ? user.name.slice(0, 10) + "..."
                                 : user.name}
                         </h2>
-                        <button onClick={() => handleAddFriend(user)}>
+                        <button onClick={() => handleAddFriend(user.id)}>
                             Add Friend
                         </button>
                     </div>

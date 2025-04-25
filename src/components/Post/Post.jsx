@@ -7,26 +7,36 @@ import Loader from "../../Common/Loader";
 import Comment from "./../Comment/Comment";
 import AppContext from "../../Context";
 
-const Post = ({ loggedInUserPosts }) => {
+const Post = ({ posts, loggedInUserPosts }) => {
+    const [visibleComments, setVisibleComments] = useState({});
+
     const { loggedInUser } = useContext(AppContext);
 
-    console.log(loggedInUserPosts);
+    const postList = posts || loggedInUserPosts;
 
-    if (!loggedInUser || !loggedInUserPosts) {
+    if (!loggedInUser || !postList) {
         return <Loader />;
     }
 
-    return loggedInUserPosts.map((post) => (
+    const handleToggleComments = (id) => {
+        setVisibleComments((prev) => ({
+            ...prev,
+            [id]: !prev[id],
+        }));
+    };
+    return postList.map((post) => (
         <div className="post" key={post.id}>
             <div className="post-header">
                 <div className="post-header-left">
                     <img
-                        src={loggedInUser.image}
-                        alt="post profile picture"
+                        src={post.users?.image || loggedInUser.image}
+                        alt="post profile"
                         className="post-profile-img"
                     />
                     <div className="post-details">
-                        <h2 className="post-author">{loggedInUser.name}</h2>
+                        <h2 className="post-author">
+                            {post.users?.name || loggedInUser.name}
+                        </h2>
                         <p className="post-time">
                             {new Date(post.created_at).toLocaleString()}
                         </p>
@@ -34,6 +44,7 @@ const Post = ({ loggedInUserPosts }) => {
                 </div>
                 <h1 className="post-options">...</h1>
             </div>
+
             <div className="post-body">
                 <div className="post-content">
                     <div
@@ -52,12 +63,10 @@ const Post = ({ loggedInUserPosts }) => {
                 </div>
 
                 <div className="post-actions">
-                    <button
-                        className={`like-button ${post.isLiked ? "liked" : ""}`}
-                    >
+                    <button className={"like-button"}>
                         Like{" "}
                         <span className="action-count">
-                            ({post.likes}){" "}
+                            (0){" "}
                             <img
                                 src={LikeIcon}
                                 alt="Likes"
@@ -65,10 +74,13 @@ const Post = ({ loggedInUserPosts }) => {
                             />
                         </span>
                     </button>
-                    <button className="comment-button">
+                    <button
+                        className="comment-button"
+                        onClick={() => handleToggleComments(post.id)}
+                    >
                         Comment{" "}
                         <span className="action-count">
-                            ({post.comments?.length || 0}){" "}
+                            (0){" "}
                             <img
                                 src={CommentIcon}
                                 alt="Comments"
@@ -88,14 +100,8 @@ const Post = ({ loggedInUserPosts }) => {
                         </span>
                     </button>
                 </div>
-                {/* {activeCommentPostId === post.id && (
-                    <Comment
-                        comments={post.comments || []}
-                        onAddComment={(comment) =>
-                            handleAddComment(post.id, comment)
-                        }
-                    />
-                )} */}
+
+                {visibleComments[post.id] && <Comment />}
             </div>
         </div>
     ));

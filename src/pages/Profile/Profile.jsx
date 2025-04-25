@@ -6,8 +6,8 @@ import Left from "../../components/Left/Left";
 import Post from "../../components/Post/Post";
 import AppContext from "../../Context";
 
-const Profile = ({ loggedInUserPosts }) => {
-    const { loggedInUser } = useContext(AppContext);
+const Profile = () => {
+    const { loggedInUser, loggedInUserPosts } = useContext(AppContext);
 
     return (
         <>
@@ -23,13 +23,19 @@ const Profile = ({ loggedInUserPosts }) => {
                         />
                         <div className="user-info">
                             <h1 className="user-name">
-                                {loggedInUser.name} {loggedInUser.lastName}
+                                {loggedInUser?.name} {loggedInUser?.lastName}
                             </h1>
-                            <h2 className="user-email">{loggedInUser.email}</h2>
+                            <h2 className="user-email">
+                                {loggedInUser?.email}
+                            </h2>
                         </div>
                     </div>
                     <div className="all-posts">
-                        <Post loggedInUserPosts={loggedInUserPosts} />
+                        {!loggedInUserPosts ? (
+                            <Loader />
+                        ) : (
+                            <Post loggedInUserPosts={loggedInUserPosts} />
+                        )}
                     </div>
                 </div>
             </div>

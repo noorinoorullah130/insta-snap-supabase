@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import "./Dashboard.css";
 import Header from "../../components/Header/Header";
@@ -10,11 +10,14 @@ import Loader from "../../Common/Loader";
 import AppContext from "../../Context";
 
 const Dashboard = () => {
-    const { loggedInUserPosts } = useContext(AppContext);
+    const { allPosts, loggedInUser } = useContext(AppContext);
+    const navigate = useNavigate();
 
-    if (!loggedInUserPosts) {
-        return <Loader />;
-    }
+    useEffect(() => {
+        if (!loggedInUser) {
+            navigate("/"); // redirect to login if not logged in
+        }
+    }, [loggedInUser, navigate]);
 
     return (
         <div className="dashboard">
@@ -22,16 +25,18 @@ const Dashboard = () => {
             <Left />
             <div className="main-content">
                 <div className="all-posts">
-                    {loggedInUserPosts.length > 0 ? (
-                        <Post loggedInUserPosts={loggedInUserPosts} />
+                    {allPosts?.length > 0 ? (
+                        <Post posts={allPosts} />
                     ) : (
-                        <p>
-                            No posts available. Please add new posts or add new
-                            friend.
-                        </p>
+                        <>
+                            <Loader />
+                            <p className="no-posts-available">
+                                Maybe no posts available. Please create new
+                                posts or follow someone to see posts.
+                            </p>
+                        </>
                     )}
                 </div>
-
                 <div className="suggestions-container">
                     <Suggestions />
                 </div>
