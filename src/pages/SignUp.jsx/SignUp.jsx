@@ -1,60 +1,69 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 
-import "./SignUp.css";
 import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { supabase } from "../../supabase.js";
+import "./SignUp.css";
+import defaultProfilePicture from "../../assets/users-images/profile pic.webp";
+import { toast } from "react-toastify";
+
+const schema = z.object({
+    name: z.string().min(1, "Name is required"),
+    lastName: z.string().min(1, "Last name is required"),
+    email: z.string().email("Invalid email"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+    image: z.any().optional(),
+});
 
 const SignUp = () => {
-    const [userDetails, setUserDetails] = useState({
-        name: "",
-        lastName: "",
-        email: "",
-        password: "",
-        image: null,
+    const {
+        register,
+        handleSubmit,
+        reset,
+        setValue,
+        formState: { errors },
+    } = useForm({
+        resolver: zodResolver(schema),
+        mode: "onChange",
     });
 
     const navigate = useNavigate();
-
     const fileInputRef = useRef();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const onSubmit = async (data) => {
+        const { email, password, name, lastName, image } = data;
 
-        const { data } = await supabase.auth.signUp({
-            email: userDetails.email,
-            password: userDetails.password,
-        });
+        const { data: signUpData, error: signUpError } =
+            await supabase.auth.signUp({
+                email,
+                password,
+            });
 
-        console.log(data);
+        if (signUpError) {
+            console.log(signUpError);
+            return;
+        }
 
-        const { error } = await supabase.from("users").insert([
+        const { error: insertError } = await supabase.from("users").insert([
             {
-                name: userDetails.name,
-                lastName: userDetails.lastName,
-                email: userDetails.email,
-                image: userDetails.image,
+                name,
+                lastName,
+                email,
+                image: image || defaultProfilePicture,
             },
         ]);
 
-        if (error) console.log(error);
-        console.log(data);
-
-        setUserDetails({
-            name: "",
-            lastName: "",
-            email: "",
-            password: "",
-            image: null,
-        });
-
-        if (fileInputRef.current) {
-            fileInputRef.current.value = "";
+        if (insertError) {
+            console.log(insertError);
+            return;
         }
-    };
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setUserDetails((prev) => ({ ...prev, [name]: value }));
+        toast.success("User saved successfully!");
+
+        reset();
+        if (fileInputRef.current) fileInputRef.current.value = "";
     };
 
     const handleImageChange = (e) => {
@@ -63,7 +72,7 @@ const SignUp = () => {
             const reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onloadend = () => {
-                setUserDetails((prev) => ({ ...prev, image: reader.result }));
+                setValue("image", reader.result);
             };
         }
     };
@@ -73,59 +82,66 @@ const SignUp = () => {
             <h1>Welcome to InstaSnap</h1>
             <div className="sign-up-container">
                 <h1>Sign Up</h1>
-                <form onSubmit={handleSubmit}>
-                    <label htmlFor="name">Name:</label>
-                    <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={userDetails.name}
-                        onChange={handleInputChange}
-                        placeholder="Enter your name"
-                        required
-                    />
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <div className="input-group">
+                        <label htmlFor="name">Name:</label>
+                        <input
+                            id="name"
+                            {...register("name")}
+                            placeholder="Enter your name"
+                        />
+                        {errors.name && (
+                            <p className="error">{errors.name.message}</p>
+                        )}
+                    </div>
 
-                    <label htmlFor="lastName">Last Name:</label>
-                    <input
-                        type="text"
-                        id="lastName"
-                        name="lastName"
-                        value={userDetails.lastName}
-                        onChange={handleInputChange}
-                        placeholder="Enter your last name"
-                        required
-                    />
+                    <div className="input-group">
+                        <label htmlFor="lastName">Last Name:</label>
+                        <input
+                            id="lastName"
+                            {...register("lastName")}
+                            placeholder="Enter your last name"
+                        />
+                        {errors.lastName && (
+                            <p className="error">{errors.lastName.message}</p>
+                        )}
+                    </div>
 
-                    <label htmlFor="email">Email:</label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={userDetails.email}
-                        onChange={handleInputChange}
-                        placeholder="Enter your email"
-                        required
-                    />
+                    <div className="input-group">
+                        <label htmlFor="email">Email:</label>
+                        <input
+                            id="email"
+                            type="email"
+                            {...register("email")}
+                            placeholder="Enter your email"
+                        />
+                        {errors.email && (
+                            <p className="error">{errors.email.message}</p>
+                        )}
+                    </div>
 
-                    <label htmlFor="password">Password:</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        value={userDetails.password}
-                        onChange={handleInputChange}
-                        placeholder="Enter your password"
-                        required
-                    />
+                    <div className="input-group">
+                        <label htmlFor="password">Password:</label>
+                        <input
+                            id="password"
+                            type="password"
+                            {...register("password")}
+                            placeholder="Enter your password"
+                        />
+                        {errors.password && (
+                            <p className="error">{errors.password.message}</p>
+                        )}
+                    </div>
 
-                    <label htmlFor="image">Upload Image:</label>
-                    <input
-                        type="file"
-                        id="image"
-                        name="image"
-                        ref={fileInputRef}
-                        onChange={handleImageChange}
-                    />
+                    <div className="input-group">
+                        <label htmlFor="image">Upload Image:</label>
+                        <input
+                            type="file"
+                            id="image"
+                            ref={fileInputRef}
+                            onChange={handleImageChange}
+                        />
+                    </div>
 
                     <button type="submit">Sign Up</button>
                 </form>

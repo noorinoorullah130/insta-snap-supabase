@@ -1,24 +1,30 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 import "./Suggestions.css";
 import Loader from "../../Common/Loader";
+import AppContext from "../../Context";
 
 const Suggestions = () => {
+    const { allUsers } = useContext(AppContext);
 
     return (
         <div className="suggestions">
             <h1>Suggestions</h1>
-            {/* {allSuggestedUsers.map((user) => (
+            {allUsers.map((user) => (
                 <div className="suggest" key={user.id}>
                     <img src={user.image} alt="" />
                     <div className="suggest-details">
-                        <h2>{user.name}</h2>
+                        <h2>
+                            {user.name.length > 15
+                                ? user.name.slice(0, 10) + "..."
+                                : user.name}
+                        </h2>
                         <button onClick={() => handleAddFriend(user)}>
                             Add Friend
                         </button>
                     </div>
                 </div>
-            ))} */}
+            ))}
         </div>
     );
 };

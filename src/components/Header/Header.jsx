@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./Header.css";
 import InstagramIcon from "../../assets/instagram-brands.svg";
-import ProfilePic from "../../assets/users-images/profile pic.webp";
+import AppContext from "../../Context";
 
 const Header = () => {
+    const { loggedInUser } = useContext(AppContext);
+    console.log(loggedInUser);
+
     return (
         <header className="header">
             <h1>
@@ -14,9 +17,9 @@ const Header = () => {
 
             <div className="profile-picture">
                 <h3>
-                    {/* {user.name} {user.lastName} */}
+                    {loggedInUser?.name} {loggedInUser?.lastName}
                 </h3>
-                <img src={ProfilePic} alt="" />
+                <img src={loggedInUser?.image} alt="" />
             </div>
         </header>
     );

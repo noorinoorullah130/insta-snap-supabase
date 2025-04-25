@@ -55,6 +55,10 @@
     flex-direction: column;
 }
 
+.sign-up-container form .input-group {
+    position: relative;
+}
+
 .sign-up-container > form label {
     font-size: 20px;
     margin-bottom: 5px;
@@ -103,4 +107,11 @@ form button:hover {
     left: auto;
     color: white;
     font-size: 20px;
+}
+
+.error {
+    color: red;
+    position: absolute;
+    left: 0;
+    bottom: 10px;
 }

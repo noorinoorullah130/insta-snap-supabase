@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./Left.css";
 import ProfilePic from "../../assets/users-images/profile pic.webp";
 import HomeIcon from "../../assets/house-solid.svg";
@@ -7,20 +7,21 @@ import LogoutIcon from "../../assets/right-from-bracket-solid.svg";
 import NewPostIcon from "../../assets/new-post.png";
 import { NavLink } from "react-router-dom";
 import Loader from "../../Common/Loader";
+import AppContext from "../../Context";
 
 const Left = () => {
-    let user = "Noorullah";
+    const { loggedInUser } = useContext(AppContext);
 
     return (
         <div className="left">
-            <NavLink to={`/dashboard/${user.id}`} className="menus">
+            <NavLink to={`/dashboard`} className="menus">
                 <img src={HomeIcon} />
                 <h3>Home</h3>
             </NavLink>
 
             <NavLink to="/profile" className="menus">
                 <img className="profile-pic" src={ProfilePic} />
-                <h3>{user.name}</h3>
+                <h3>{loggedInUser?.name}</h3>
             </NavLink>
 
             <NavLink to="/newpost" className="menus">

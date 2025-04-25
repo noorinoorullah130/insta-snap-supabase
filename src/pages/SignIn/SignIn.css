@@ -49,6 +49,10 @@
     position: relative;
 }
 
+.sign-in-container > form .input-group {
+    position: relative;
+}
+
 .sign-in-container > form label {
     font-size: 20px;
     margin-bottom: 5px;
@@ -103,4 +107,11 @@ form button:hover {
     position: absolute;
     bottom: -30px;
     color: red;
+}
+
+.error {
+    color: red;
+    position: absolute;
+    left: 0;
+    bottom: 10px;
 }
