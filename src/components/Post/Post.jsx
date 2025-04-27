@@ -63,45 +63,21 @@ const Post = ({ posts, loggedInUserPosts }) => {
                 </div>
 
                 <div className="post-actions">
-                    <button className={"like-button"}>
-                        Like{" "}
-                        <span className="action-count">
-                            (0){" "}
-                            <img
-                                src={LikeIcon}
-                                alt="Likes"
-                                className="action-icon"
-                            />
-                        </span>
-                    </button>
-                    <button
-                        className="comment-button"
-                        onClick={() => handleToggleComments(post.id)}
-                    >
-                        Comment{" "}
-                        <span className="action-count">
-                            (0){" "}
-                            <img
-                                src={CommentIcon}
-                                alt="Comments"
-                                className="action-icon"
-                            />
-                        </span>
-                    </button>
-                    <button className="share-button">
-                        Share{" "}
-                        <span className="action-count">
-                            (0){" "}
-                            <img
-                                src={ShareIcon}
-                                alt="Share"
-                                className="action-icon"
-                            />
-                        </span>
-                    </button>
+                    <div className="buttons">
+                        <button className={"like-button"}>Like</button>
+                        <button
+                            className="comment-button"
+                            onClick={() => handleToggleComments(post.id)}
+                        >
+                            Comment
+                        </button>
+                        <button className="share-button">Share</button>
+                    </div>
                 </div>
 
-                {visibleComments[post.id] && <Comment />}
+                {visibleComments[post.id] && (
+                    <Comment postId={post.id} loggedInUser={loggedInUser.id} />
+                )}
             </div>
         </div>
     ));

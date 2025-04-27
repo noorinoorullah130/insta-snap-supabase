@@ -17,12 +17,20 @@
     font-size: 14px;
 }
 
-.comment .sent-icon {
-    width: 40px;
+.comment .sent-btn {
+    width: 100px;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
     position: absolute;
-    top: 7%;
-    right: 1%;
+    top: 1px;
+    right: 0;
+    bottom: 1px;
     cursor: pointer;
+    background-color: #1877f2;
+    color: white;
+    font-weight: bold;
 }
 
 .all-comments {
@@ -43,15 +51,17 @@
 
 .single-comment .comment-detail {
     display: flex;
-    gap: 10px;
+    gap: 1.5rem;
 }
 
 .comment-detail img {
     width: 50px;
+    height: 50px;
     border-radius: 50%;
 }
 
 .single-comment .comment-content {
     width: 100%;
-    margin-left: 20px;
+    margin-left: 2rem;
+    margin-top: 5px;
 }

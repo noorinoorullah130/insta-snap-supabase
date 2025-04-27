@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import { Route, Routes, useNavigate } from "react-router-dom";
 import SignIn from "./pages/SignIn/SignIn";
 import Dashboard from "./pages/Dashboard/Dashboard";
@@ -46,14 +47,32 @@ const App = () => {
     const fetchAllUsers = async () => {
         if (!loggedInUser?.id) return;
 
-        const { data, error } = await supabase
+        const { data: followingData, error: followingError } = await supabase
+            .from("follows")
+            .select("following_id")
+            .eq("follower_id", loggedInUser.id);
+
+        if (followingError) {
+            console.log("Error fetching friends:", followingError);
+            return;
+        }
+
+        const followingIds = followingData.map((f) => f.following_id);
+
+        const { data: usersData, error: usersError } = await supabase
             .from("users")
             .select("*")
-            .neq("id", loggedInUser.id);
-        if (error) console.log(error);
-        else {
-            setAllUsers(data);
-            console.log(data);
+            .not(
+                "id",
+                "in",
+                `(${[...followingIds, loggedInUser.id].join(",")})`
+            );
+
+        if (usersError) {
+            console.log("Error fetching users:", usersError);
+        } else {
+            setAllUsers(usersData);
+            console.log("Users not friends and not self:", usersData);
         }
     };
 
@@ -137,6 +156,9 @@ const App = () => {
                     loggedInUserPosts,
                     following,
                     allPosts,
+                    fetchUserAndFollowingPost,
+                    setFollowing,
+                    fetchAllUsers,
                 }}
             >
                 <Routes>

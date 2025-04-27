@@ -44,9 +44,27 @@
 
 .post-body .post-actions {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
+    flex-direction: column;
     gap: 5px;
+}
+
+.post-count-details {
+    display: flex;
+}
+
+.action-count {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.action-count img {
+    width: 25px;
+}
+
+.post-actions .buttons {
+    display: flex;
 }
 
 .post-actions button {

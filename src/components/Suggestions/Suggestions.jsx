@@ -7,7 +7,8 @@ import { supabase } from "../../supabase";
 import { toast } from "react-toastify";
 
 const Suggestions = () => {
-    const { loggedInUser, allUsers } = useContext(AppContext);
+    const { loggedInUser, allUsers, fetchAllUsers, fetchUserAndFollowingPost } =
+        useContext(AppContext);
 
     const handleAddFriend = async (id) => {
         const { data, error } = await supabase
@@ -19,6 +20,8 @@ const Suggestions = () => {
         } else {
             console.log(data);
             toast.success("Successfully following user!");
+            fetchAllUsers();
+            fetchUserAndFollowingPost();
         }
 
         console.log(id);
